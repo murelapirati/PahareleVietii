@@ -1,16 +1,27 @@
-# React + Vite
+#  The Cup Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A perfectly modernized "guess what's under the cup" game rebuilt with **React**, **Vite**, and **Framer Motion**! 
 
-Currently, two official plugins are available:
+!!!!THIS IS  PROJECT MADE STRICTLY FOR A FRIEND SO NO OFFENSE TOWARDS ANYONE!!!!
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The experience is fully local and runs at a buttery smooth 60fps natively in your browser. All your options automatically get a beautifully styled Emerald Green cup generated for them. Simply click shuffle, watch the cups dance across the table, and make your choice!
 
-## React Compiler
+##  How to Play
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+I've set this up so it runs magically without you having to manually deal with configurations or packages!
 
-## Expanding the ESLint configuration
+### For Windows Users
+1. **Unzip** this entire folder.
+2. Double click the **`run.bat`** file.
+3. The script will automatically check if you have Node.js installed. If you don't, it will instantly fetch the official installer to install it for you. Next, it will automatically download the web app dependencies in the background, and seamlessly launch your browser! 
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+*Note: You may be asked by Windows for Administrator permission if it needs to automatically install Node.js strictly for the very first setup.*
+
+### For Mac/Linux Users
+1. Open the unzipped folder in your terminal.
+2. Run `./run.sh`
+3. Similar to Windows, it will check if `node` is available. If missing, it uses your distribution's package manager (`brew`, `apt`, `pacman`, etc.) to install it perfectly, grabs the dependencies, and launches the game dynamically!
+
+---
+
+**That's it! Destiny is under the cup!**
