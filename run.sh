@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Clear screen
 clear
-
 echo ""
 echo "    ╔════════════════════════════════════════╗"
 echo "    ║        🎯 CUP GAME - Starting...       ║"
@@ -13,26 +11,49 @@ echo ""
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"
 
-# Check if node is installed
+# 1. Check & Auto-Install Node.js 
 if ! command -v node &> /dev/null; then
+    echo "[!] Node.js not found. Attempting automatic installation..."
+    
+    if command -v apt &> /dev/null; then
+        echo "Detected Debian/Ubuntu. Installing via APT..."
+        sudo apt update
+        sudo apt install -y nodejs npm
+    elif command -v brew &> /dev/null; then
+        echo "Detected MacOS/LinuxBrew. Installing via Homebrew..."
+        brew install node
+    elif command -v pacman &> /dev/null; then
+        echo "Detected Arch Linux. Installing via Pacman..."
+        sudo pacman -S --noconfirm nodejs npm
+    elif command -v dnf &> /dev/null; then
+        echo "Detected Fedora/RHEL. Installing via DNF..."
+        sudo dnf install -y nodejs npm
+    else
+        echo "❌ Could not determine package manager to install Node.js."
+        echo "Please install Node manually from https://nodejs.org/"
+        exit 1
+    fi
+    
+    # Verify installation succeeded
+    if ! command -v node &> /dev/null; then
+        echo "❌ Automatic installation failed. Please install Node manually."
+        exit 1
+    fi
+    echo "✅ Node.js installed successfully!"
     echo ""
-    echo "❌ Node.js is not installed or not in PATH!"
-    echo "Please install Node from https://nodejs.org/"
-    echo "Or use your package manager (e.g., sudo apt install nodejs npm)"
-    echo ""
-    exit 1
 fi
 
-echo "Checking dependencies..."
+# 2. Check and install dependencies
+echo "[*] Checking project dependencies..."
 npm install --no-audit --no-fund
 
 echo ""
-echo "Starting React dev server on http://localhost:5173..."
+echo "[*] Starting React dev server on http://localhost:5173..."
 echo ""
 
-# Open browser asynchronously
+# 3. Open browser asynchronously
 (sleep 3 && {
-    echo "Opening your browser (Brave/Firefox)..."
+    echo "[*] Launching your browser..."
     if command -v brave-browser > /dev/null; then
         brave-browser http://localhost:5173
     elif command -v brave > /dev/null; then
@@ -48,5 +69,5 @@ echo ""
     fi
 }) &
 
-# Start Vite server
+# 4. Start Vite server
 npm run dev
