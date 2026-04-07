@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cup Game - Guess the Choice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .choices-list {
+            margin-bottom: 30px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .choice-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .choice-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .choice-item span {
+            flex: 1;
+            color: #333;
+        }
+
+        .choice-item button {
+            padding: 5px 10px;
+            background: #ff6b6b;
+            font-size: 0.8em;
+        }
+
+        .game-section {
+            display: none;
+        }
+
+        .game-section.active {
+            display: block;
+        }
+
+        .cups-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 40px;
+            margin-bottom: 50px;
+            perspective: 1000px;
+            min-height: 250px;
+            flex-wrap: wrap;
+        }
+
+        .cup {
+            width: 100px;
+            height: 120px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease-out;
+            flex-shrink: 0;
+        }
+
+        .cup:hover:not(.shuffling) {
+            transform: translateY(-12px);
+            filter: brightness(1.15);
+        }
+
+        .cup.shuffling {
+            pointer-events: none;
+        }
+
+        .cup-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .cup.revealed .cup-wrapper {
+            transform: rotateX(180deg) translateY(-100px);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .cup-front {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .cup-back {
+            position: absolute;
+            top: -120px;
+            left: -20px;
+            right: -20px;
+            width: calc(100% + 40px);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            word-wrap: break-word;
+        }
+
+        .cup-shape {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px 15px 50px 50px;
+            position: relative;
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.3),
+                inset -2px 0 8px rgba(0, 0, 0, 0.2),
+                inset 2px 0 8px rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .cup-shine {
+            position: absolute;
+            top: 5%;
+            left: 15%;
+            width: 25%;
+            height: 30%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        .cup-handle {
+            position: absolute;
+            right: -15px;
+            top: 25%;
+            width: 20px;
+            height: 50px;
+            border: 3px solid currentColor;
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+            opacity: 0.7;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+            min-height: 30px;
+        }
+
+        .message.winner {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state p {
+            margin-bottom: 10px;
+        }
+
+        @keyframes shuffle-left {
+            0%, 100% { transform: translateX(0) translateY(0) scaleY(1); }
+            50% { transform: translateX(-60px) translateY(-8px) scaleY(0.95); }
+        }
+
+        @keyframes shuffle-right {
+            0%, 100% { transform: translateX(0) translateY(0) scaleY(1); }
+            50% { transform: translateX(60px) translateY(-8px) scaleY(0.95); }
+        }
+
+        @keyframes shuffle-center {
+            0%, 100% { transform: translateX(0) translateY(0) scaleY(1); }
+            25% { transform: translateX(-60px) translateY(-8px) scaleY(0.95); }
+            75% { transform: translateX(60px) translateY(-8px) scaleY(0.95); }
+        }
+
+        @keyframes shuffle-lift {
+            0%, 100% { transform: translateY(0) rotateZ(0deg); }
+            50% { transform: translateY(-20px) rotateZ(-3deg); }
+        }
+
+        .cup.move-left {
+            animation: shuffle-left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cup.move-right {
+            animation: shuffle-right 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cup.move-center {
+            animation: shuffle-center 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cup.move-lift {
+            animation: shuffle-lift 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            .cups-container {
+                gap: 20px;
+            }
+
+            .cup {
+                width: 85px;
+                height: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Cup Game</h1>
+        <p class="subtitle">Add choices, shuffle, and guess!</p>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="choiceInput" 
+                placeholder="Enter a choice... (e.g., Pizza, Movie, Sleep)"
+                onkeypress="handleEnter(event)"
+            >
+            <button onclick="addChoice()">Add</button>
+        </div>
+
+        <!-- Choices List -->
+        <div class="choices-list" id="choicesList"></div>
+
+        <!-- Game Section -->
+        <div class="game-section" id="gameSection">
+            <div class="message" id="message"></div>
+            <div class="cups-container" id="cupsContainer"></div>
+            <div class="controls">
+                <button id="shuffleBtn" onclick="startShuffle()">🎲 Shuffle & Play</button>
+                <button id="resetBtn" onclick="resetGame()" style="display: none;">Reset Game</button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+            <p>👇 Add at least 2 choices to start playing!</p>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

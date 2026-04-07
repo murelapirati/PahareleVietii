@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700;900&display=swap');
+
+:root {
+  --bg-color: #064e3b;
+  --bg-gradient: radial-gradient(circle at top, #065f46 0%, #022c22 100%);
+  --surface-color: rgba(6, 95, 70, 0.7);
+  --surface-border: rgba(16, 185, 129, 0.2);
+  --primary: #10b981;
+  --primary-hover: #34d399;
+  --text-main: #ecfdf5;
+  --text-muted: #a7f3d0;
+  --cup-base: rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Avoid weird scrolls during animation */
+}
+
+h1, h2, h3 {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism Container */
+.glass-container {
+  background: var(--surface-color);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--surface-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 90vw;
+  max-width: 800px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title-gradient {
+  background: linear-gradient(135deg, #a7f3d0 0%, #10b981 50%, #047857 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  margin-top: 0.25rem;
+}
+
+/* Inputs & Buttons */
+.input-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.input-field {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: white;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-field:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #059669);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, var(--primary-hover), #047857);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Choices List */
+.choices-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-height: 15rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.choices-container::-webkit-scrollbar {
+  width: 6px;
+}
+.choices-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
+
+.choice-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--surface-border);
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.choice-chip:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.choice-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor; /* glow effect */
+}
+
+/* Game Area */
+.game-table {
+  position: relative;
+  min-height: 250px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem 0;
+  flex-wrap: wrap;
+  perspective: 1000px;
+}
+
+/* The actual Cup Design */
+.cup-wrapper {
+  position: relative;
+  width: 100px;
+  height: 120px;
+  z-index: 2;
+}
+
+/* We animate this container when clicked/lifting */
+.cup-container {
+  width: 100px;
+  height: 120px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  transform-origin: center bottom;
+  z-index: 3;
+}
+
+.cup-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  /* Upside down cup: Rounded top, slightly rounded bottom corners */
+  border-radius: 40px 40px 8px 8px;
+  box-shadow: 
+    inset -15px 0 20px rgba(0,0,0,0.4),
+    inset 15px 0 20px rgba(255,255,255,0.3),
+    0 10px 20px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.cup-top {
+  position: absolute;
+  top: -2px;
+  left: 15%;
+  width: 70%;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  filter: blur(1px);
+}
+
+.cup-rim {
+  position: absolute;
+  bottom: -2px;
+  left: -2%;
+  width: 104%;
+  height: 8px;
+  border-radius: 50%;
+  background: inherit;
+  filter: brightness(0.6);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+}
+
+.cup-shine {
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 25%;
+  height: 80%;
+  background: linear-gradient(to right, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+  border-radius: 50%;
+  transform: rotate(-10deg);
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.choice-hidden-text {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+  font-family: 'Outfit', sans-serif;
+  text-align: center;
+  width: 130px;
+  background: rgba(15, 23, 42, 0.95);
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  word-wrap: break-word;
+  z-index: 1; /* Below the cup */
+  pointer-events: none;
+}
+
+/* Empty State / Status Text */
+.status-message {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  min-height: 2rem;
+  color: var(--primary-hover);
+}
+
+.success-message {
+  color: #10b981;
+  font-size: 1.5rem;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
